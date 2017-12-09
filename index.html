@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>History Triva Game</title>
+	<script scrc=https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js""></script>
+<!-- 	<link rel="stylesheet" type="text/css" href="reset.css">
+	<link rel="stylesheet" type="text/css" href="style.css"> -->
+</head>
+<body>
+
+	<div id="quiz">
+		
+	</div>
+	<button id="submit" showResults()>
+		Submit
+	</button>
+	<div id="results">
+		
+	</div>
+
+	<script type="text/javascript">
+
+	const quizContainer = document.getElementById("quiz");
+	const resultsContainer = document.getElementById("results");
+	const submitButton = document.getElementById("submit");
+
+
+	const myQuestions =
+	[
+		{
+			question: "What is the oldest language?",
+			answers:
+			{
+				a: "Cuneiform",
+				b: "Hieroglyphics",
+				c: "Sanskrit",
+				d: "Aramaic Alphabet",
+			},
+			correctAnswer: "a"
+		},
+		{
+			question: "Who was the first Holy Roman Emperor?",
+			answers:
+				{
+					a: "Charlemagne",
+					b: "Henry IV",
+					c: "Otto I",
+					d: "Louis the Pious",
+				},
+			correctAnswer: "a"
+		},
+		{
+			question: "When were the first black slaves brought to America?",
+			answers:
+				{
+					a: "1492",
+					b: "1619",
+					c: "1783",
+					d: "1900",
+				},
+			correctAnswer: "b"
+		},
+		{
+			question: "Who made himself head of the English Church in 1533, after being excommunicated by the Pope?",
+			answers:
+				{
+					a: "Philip II",
+					b: "Henry VIII",
+					c: "Henry IV",
+					d: "Sir Francis Drake",
+				},
+			correctAnswer: "b"
+		},
+		{
+			question: "In 1607, what was the first English colony established in America?",
+			answers:
+				{
+					a: "Roanoke Colony",
+					b: "Maryland",
+					c: "Williamsburg",
+					d: "Jamestown",
+				},
+			correctAnswer: "d"
+		},
+		{
+			question: "Who wrote Don Quixote de la Mancha?",
+			answers:
+				{
+					a: "Shakespeare",
+					b: "Chaucer",
+					c: "Juan Peron",
+					d: "Cervantes",
+				},
+			correctAnswer: "d"
+		},
+		{
+			question: "What significant event took place in 1666?",
+			answers:
+				{
+					a: "sinking of the Titanic",
+					b: "end of the Thrity Years' War",
+					c: "Hindenburg Disaster",
+					d: "Great Fire of London",
+				},
+			correctAnswer: "d"
+		},
+		{
+			question: "An important document was signed in the U.S. in 1787. What was it?",
+			answers:
+				{
+					a: "The Emancipation Proclimation",
+					b: "The Declaration of Independance",
+					c: "The Bill of Rights",
+					d: "The U.S. Constitution",
+				},
+			correctAnswer: "d"
+		},
+		{
+			question: "Who painted the Sistine Chapel?",
+			answers:
+				{
+					a: "Michelangelo",
+					b: "Monet",
+					c: "Picasso",
+					d: "Da Vinci",
+				},
+			correctAnswer: "a"
+		},
+		{
+			question: "Who was the first man to walk on the moon?",
+			answers:
+				{
+					a: "Niel Armstrong",
+					b: "Alan B. Shepard, jr.",
+					c: "Yuri Gagarin",
+					d: "Buzz Aldrin",
+				},
+			correctAnswer: "a"
+		},
+		{
+			question: "Who or what was Big Ben?",
+			answers:
+				{
+					a: "a clock tower in London",
+					b: "a grizzly bear from an old TV show",
+					c: "nickname for Benjamin Franklin",
+					d: "nickname for the Steelers' quarterback",
+				},
+			correctAnswer: "a"
+		},
+		{
+			question: "What triggered the WW1?",
+			answers:
+				{
+					a: "German Militarism",
+					b: "death of Archduke Franz Ferdinand",
+					c: "formation of The Triple Alliance",
+					d: "Bosnian Crisis",
+				},
+			correctAnswer: "b"
+		},
+		{
+			question: "What symbol of American independance is located in Philadelphia?",
+			answers:
+				{
+					a: "Statue of Liberty",
+					b: "Lincolin Memorial",
+					c: "Liberty Bell",
+					d: "Fort Knox",
+				},
+			correctAnswer: "c"
+		}
+	];
+
+	(function()
+	{
+  		function buildQuiz()
+  		{
+	    	const output = [];
+	    	myQuestions.forEach((currentQuestion, questionNumber) =>
+	    	{
+	      		const answers = [];
+	      		for (letter in currentQuestion.answers)
+	      		{
+	        		answers.push(
+			          `<label>
+			            <input type="radio" name="question${questionNumber}" value="${letter}">
+			            ${letter} :
+			            ${currentQuestion.answers[letter]}
+			          </label>`
+	        	);
+	      	}
+	      	output.push(
+		        `<div class="question"> ${currentQuestion.question} </div>
+		        <div class="answers"> ${answers.join("")} </div>`
+	      	);
+		    });
+		    quizContainer.innerHTML = output.join("");
+		    console.log('quizContainer+++++', quizContainer.innerHTML);
+  		}
+
+	  	function showResults()
+	  	{
+		    const answerContainers = quizContainer.querySelectorAll(".answers");
+	    	let numCorrect = 0;
+		    myQuestions.forEach((currentQuestion, questionNumber) =>
+		    {
+			    const answerContainer = answerContainers[questionNumber];
+			    const selector = `input[name=question${questionNumber}]:checked`;
+			    const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+	      		if (userAnswer === currentQuestion.correctAnswer)
+	      		{
+	        		numCorrect++;
+	        		console.log('userAnswer:',userAnswer);
+	        		answerContainers[questionNumber].style.color = "lightgreen";
+	      		}
+	      		else
+	      		{
+	        		answerContainers[questionNumber].style.color = "red";
+	      		}
+	    	});
+		    resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
+	  	}
+
+		buildQuiz();
+	  	submitButton.addEventListener("click", showResults);
+	})();
+
+// 1. Need to add a timer.
+// 2. When you hit submitButton the page should change to another page showing correct or incorrect number of questions.
+// 3. Add CSS
+
+	</script>
+</body>
+</html>
